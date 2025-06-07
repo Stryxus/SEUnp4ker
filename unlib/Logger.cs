@@ -1,26 +1,9 @@
 using System.Text;
-using Serilog;
-using Serilog.Sinks.SystemConsole.Themes;
 
 namespace unlib;
 
 public static class Logger
 {
-    private static readonly Serilog.Core.Logger InternalConsoleLogger;
-
-    static Logger()
-    {
-        InternalConsoleLogger = new LoggerConfiguration().WriteTo.Console(theme: AnsiConsoleTheme.Code, outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message}{NewLine}{Exception}").CreateLogger();
-        try
-        {
-            Console.Clear();
-        }
-        catch
-        {
-            // ignored
-        } // For non-console apps.
-    }
-
     public static event Action<int, int, string?>? OnLog;
 
     private static void PushLog(LogPackage pckg)
@@ -29,33 +12,42 @@ public static class Logger
         {
             case 0:
             {
+                var originalColor = Console.ForegroundColor;
                 switch (pckg.Level)
                 {
-                    case -2:
+                    case -2: // Write
                         Console.Write(pckg.Message);
                         break;
-                    case -1:
+                    case -1: // WriteLine
                         Console.WriteLine(pckg.Message);
                         break;
-                    case 0:
-                        if (pckg.Message != null) InternalConsoleLogger.Information(pckg.Message);
+                    case 0: // Info
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        WriteTimestamp("INF");
+                        Console.WriteLine(pckg.Message);
                         break;
-                    case 1:
-                        if (pckg.Message != null) InternalConsoleLogger.Warning(pckg.Message);
+                    case 1: // Warning
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        WriteTimestamp("WRN");
+                        Console.WriteLine(pckg.Message);
                         break;
-                    case 2:
-                        if (pckg.Message != null) InternalConsoleLogger.Error(pckg.Message);
+                    case 2: // Error
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        WriteTimestamp("ERR");
+                        Console.WriteLine(pckg.Message);
                         break;
-                    case 3:
-                        if (pckg.Message != null) InternalConsoleLogger.Fatal(pckg.Message);
+                    case 3: // Fatal/Exception
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        WriteTimestamp("FTL");
+                        Console.WriteLine(pckg.Message);
                         break;
-                    default:
-                        if (pckg.Message != null) InternalConsoleLogger.Information(pckg.Message);
+                    default: // Default to Info
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        WriteTimestamp("INF");
+                        Console.WriteLine(pckg.Message);
                         break;
                 }
-#if DEBUG
-                if (pckg.Message != null) InternalConsoleLogger.Debug(pckg.Message);
-#endif
+                Console.ForegroundColor = originalColor;
                 break;
             }
             case 3:
@@ -70,6 +62,12 @@ public static class Logger
         }
 
         OnLog?.Invoke(pckg.ClearMode, pckg.Level, pckg.Message);
+    }
+
+    private static void WriteTimestamp(string level)
+    {
+        var ts = DateTime.Now.ToString("HH:mm:ss.fff");
+        Console.Write($"[{ts} {level}] ");
     }
 
     public static void Write(object? msg)
