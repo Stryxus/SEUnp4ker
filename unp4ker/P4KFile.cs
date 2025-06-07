@@ -20,7 +20,7 @@ public class P4KFile : IDisposable
     public List<string> FilterEntries(Func<ZipEntry, bool> where) => Archive.Where(where).Select(entry => entry.Name).ToList();
 
     public ParallelQuery<ZipEntry> GetParallelEnumerator(int threads, ParallelMergeOptions merge, Func<ZipEntry, int, ZipEntry> func) => 
-        Archive.Where(entry => FilteredOrderedEntries.Contains(entry.Name)).AsParallel().AsOrdered().WithDegreeOfParallelism(threads).WithMergeOptions(merge).Select(func);
+        Archive.Where(entry => FilteredOrderedEntries.Any(s => entry.Name.Contains(s))).AsParallel().AsOrdered().WithDegreeOfParallelism(threads).WithMergeOptions(merge).Select(func);
     
     public void Extract(ZipEntry entry, FileInfo extractionFile)
     {

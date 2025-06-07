@@ -1,6 +1,5 @@
 ﻿using unp4k;
 
 EntryPoint.Init([.. args]);
-
-Worker.Process_P4K();
-Worker.Extract();
+using Worker worker = new();
+worker.Process();
