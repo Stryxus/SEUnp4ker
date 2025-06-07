@@ -179,7 +179,7 @@ public static class Logger
         while (c is null)
         {
             NewLine();
-            Console.Write($"{question} y/n: ");
+            Console.Write($"{question}: [y/n]: ");
             c = Console.ReadKey().KeyChar.ToString().ToLower()[0];
             if (c is 'y' or 'n') continue;
             Console.Error.WriteLine("Please input y for yes or n for no!");
