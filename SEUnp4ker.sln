@@ -20,6 +20,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{5197
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICSharpCode.SharpZipLib", "Modules\SharpZipLib\src\ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.csproj", "{DB037FED-5124-4410-BF58-93D35B49CDF5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zstd", "zstd", "{7AC47B42-6FCD-4228-8BA3-EEED54EAA181}"
+	ProjectSection(SolutionItems) = preProject
+		zstd\build_all.sh = zstd\build_all.sh
+		zstd\build_linux_x64.sh = zstd\build_linux_x64.sh
+		zstd\build_macos_arm64.sh = zstd\build_macos_arm64.sh
+		zstd\setup_deps.sh = zstd\setup_deps.sh
+		zstd\build_linux_arm64.sh = zstd\build_linux_arm64.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,5 +56,6 @@ Global
 		{C8046B84-4CE3-44FC-B554-73447F8E92DE} = {3F5FC93B-A732-489D-A042-37004C4A60B5}
 		{58367F60-A799-4F26-93CB-553136CF60E6} = {3F5FC93B-A732-489D-A042-37004C4A60B5}
 		{DB037FED-5124-4410-BF58-93D35B49CDF5} = {5197197D-E912-4B12-BED7-431ECA151433}
+		{7AC47B42-6FCD-4228-8BA3-EEED54EAA181} = {74404C5F-01B7-4AB4-AAF4-548C566A2BB1}
 	EndGlobalSection
 EndGlobal
