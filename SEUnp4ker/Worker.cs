@@ -11,7 +11,9 @@ public static class Worker
 {
 	private static P4KFile? P4K { set; get; }
 
-    internal static bool Process_P4K()
+	private static List<string> FilteredOrderedEntries = [];
+
+	internal static bool Process_P4K()
     {
 	    var isDecompressCount = 0;
         var isLockedCount = 0;
@@ -22,7 +24,7 @@ public static class Worker
 		// Set up the stream from the Data.p4k and contain it as an ICSC ZipFile with the appropriate keys then enqueue all zip entries.
 		// Filter out zip entries which cannot be decompressed and/or are locked behind a cipher.
 		// Speed up the extraction by a large amount by filtering out the files which already exist and don't need updating.
-		P4K.FilterEntries(entry =>
+		FilteredOrderedEntries = P4K.FilterEntries(entry =>
 		{
 			if (Globals.Filters.Count == 0 || Globals.Filters.Any(o => entry.Name.Contains(o)))
 			{
@@ -47,8 +49,7 @@ public static class Worker
 				return !isLocked && (Globals.ShouldOverwrite || Globals.ShouldPrintDetailedLogs || !fileExists || fileLength != entryLength);
 			}
 			else return false;
-		});
-		P4K.OrderBy(x => x.Name);
+		}).OrderBy(x => x).ToList();
 
 		var outputDrive = DriveInfo.GetDrives().First(x => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 
 			x.Name == Globals.OutDirectory?.FullName[..3] : 
@@ -61,7 +62,7 @@ public static class Worker
 				$" |         Estimated Required Space | {(!Globals.ShouldOverwrite && additionalFiles ? "An Additional " : string.Empty)}" +
 																				$"{bytesSize / 1000000000D:#,##0.000000000} GB" + '\n' +
 				 " |                                  | " + '\n' +
-				$" |                       File Count | {P4K.EntryCount:#,##0}" +
+				$" |                       File Count | {P4K.Archive.Count:#,##0}" +
 																				$"{(!Globals.ShouldOverwrite && additionalFiles ? " Additional Files" : string.Empty)}" +
 																				$"{(Globals.Filters.Count != 0 ? $" Filtered From {string.Join(",", Globals.Filters)}" : string.Empty)}" + '\n' +
 				$" |               Files Incompatible | {isDecompressCount:#,##0}" +
@@ -104,9 +105,9 @@ public static class Worker
 
         // Extract each entry, then serializing it or the Forging it.
         Logger.NewLine(2);
-        if (P4K is not null && P4K.EntryCount is not 0) // This will never be null, but it makes the analyzer happy.
+        if (P4K is not null && P4K.Archive.Count is not 0) // This will never be null, but it makes the analyzer happy.
         {
-	        BlockingCollection<ZipEntry> outputQueue = new(P4K.EntryCount);
+	        BlockingCollection<ZipEntry> outputQueue = new((int)P4K.Archive.Count);
             var output = Task.Run(() => Print(outputQueue, fileTime));
             var pwi = P4K.GetParallelEnumerator(Globals.ThreadLimit, ParallelMergeOptions.NotBuffered, (entry, _) =>
             {
@@ -134,7 +135,7 @@ public static class Worker
 	            if (P4K is null) return; // This will never be null but it makes the analyzer happy.
 	            foreach (var entry in queue.GetConsumingEnumerable())
 	            {
-		            var percentage = (_tasksDone is 0 ? 0D : 100D * _tasksDone / P4K.EntryCount).ToString("000.00000");
+		            var percentage = (_tasksDone is 0 ? 0D : 100D * _tasksDone / P4K.Archive.Count).ToString("000.00000");
 		            if (Globals.ShouldPrintDetailedLogs)
 		            {
 			            Logger.LogInfo($"{percentage}% \e[92m■\e[39m > {entry.Name}" + '\n' +
