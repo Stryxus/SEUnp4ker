@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{74
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		LICENSE = LICENSE
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unlib", "unlib\unlib.csproj", "{C8046B84-4CE3-44FC-B554-73447F8E92DE}"
@@ -16,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unp4ker", "unp4ker\unp4ker.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{5197197D-E912-4B12-BED7-431ECA151433}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICSharpCode.SharpZipLib", "Modules\SharpZipLib\src\ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.csproj", "{0EAF36B5-D693-4427-9688-0959D839A455}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICSharpCode.SharpZipLib", "Modules\SharpZipLib\src\ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.csproj", "{DB037FED-5124-4410-BF58-93D35B49CDF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,14 +38,14 @@ Global
 		{58367F60-A799-4F26-93CB-553136CF60E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58367F60-A799-4F26-93CB-553136CF60E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58367F60-A799-4F26-93CB-553136CF60E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0EAF36B5-D693-4427-9688-0959D839A455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0EAF36B5-D693-4427-9688-0959D839A455}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0EAF36B5-D693-4427-9688-0959D839A455}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0EAF36B5-D693-4427-9688-0959D839A455}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB037FED-5124-4410-BF58-93D35B49CDF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB037FED-5124-4410-BF58-93D35B49CDF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB037FED-5124-4410-BF58-93D35B49CDF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB037FED-5124-4410-BF58-93D35B49CDF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C8046B84-4CE3-44FC-B554-73447F8E92DE} = {3F5FC93B-A732-489D-A042-37004C4A60B5}
 		{58367F60-A799-4F26-93CB-553136CF60E6} = {3F5FC93B-A732-489D-A042-37004C4A60B5}
-		{0EAF36B5-D693-4427-9688-0959D839A455} = {5197197D-E912-4B12-BED7-431ECA151433}
+		{DB037FED-5124-4410-BF58-93D35B49CDF5} = {5197197D-E912-4B12-BED7-431ECA151433}
 	EndGlobalSection
 EndGlobal
