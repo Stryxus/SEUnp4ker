@@ -1,2 +1,2 @@
-# StarDigi
-The Rust based WebAssembly utility for ripping Star Engine apart!
+# SEUnp4ker
+Giving the ability to tear apart Star Engine games!
