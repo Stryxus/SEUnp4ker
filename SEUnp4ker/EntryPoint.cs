@@ -111,7 +111,7 @@ public static class EntryPoint
             else
             {
                 if (Globals.OutDirectory.Exists) return;
-                Logger.LogError($"Output path '{Globals.OutDirectory.FullName}' does not exist! Creating...");
+                Logger.LogWarn($"Output path '{Globals.OutDirectory.FullName}' does not exist! Creating...");
                 Globals.OutDirectory.Create();
                 acceptingInputs = false;
             }
@@ -119,10 +119,23 @@ public static class EntryPoint
         
         // Show the user any warning if anything worrisome is detected.
         var question = string.Empty;
-        if (Globals.Filters.Contains("*.*")) question += "\nENORMOUS JOB WARNING: unp4k has been run with no filters or the *.* filter!\n" +
-                                                            "This extraction job will take up a large amount of space and take quite some time to complete!";
-        if (Globals.ShouldOverwrite) question += "\nOVERWRITE ENABLED: unp4k has been run with the overwrite option!\n" +
-                                                    "Overwriting files will take much longer than choosing a new empty directory!\n";
+        var askQuestion = false;
+        
+        if (Globals.Filters.Contains("*.*"))
+        {
+            question += "\nENORMOUS JOB WARNING: unp4k has been run with no filters or the *.* filter!\n" +
+                        "This extraction job will take up a large amount of space and take quite some time to complete!";
+            askQuestion = true;
+        }
+        
+        if (Globals.ShouldOverwrite)
+        {
+            question += "\nOVERWRITE ENABLED: unp4k has been run with the overwrite option!\n" +
+                        "Overwriting files will take much longer than choosing a new empty directory!\n";
+            askQuestion = true;
+        }
+
+        if (!askQuestion) return;
         if (Logger.AskUserInput(question += "\n\nProceed")) return;
         Logger.LogInfo("Exiting...");
         Environment.Exit(0);
