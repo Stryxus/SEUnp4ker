@@ -1,4 +1,4 @@
-using unlib;
+using System.Runtime.InteropServices;
 
 namespace unp4k;
 
@@ -6,7 +6,7 @@ public static class EntryPoint
 {
     private static DirectoryInfo DefaultOutputDirectory { get; } = new(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "unp4k"));
     private static DirectoryInfo DefaultExtractionDirectory { get; } = new(Path.Join(DefaultOutputDirectory.FullName, "output"));
-    private static FileInfo? Defaultp4KFile { get; } = Os.IsWindows ?
+    private static FileInfo? Defaultp4KFile { get; } = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
         new FileInfo(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Roberts Space Industries", "StarCitizen", "LIVE", "Data.p4k")) : null;
 
     private static readonly string Manual = 

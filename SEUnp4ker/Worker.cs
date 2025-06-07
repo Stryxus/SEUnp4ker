@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Zip;
 using unlib;
 using unp4ker;
@@ -49,8 +50,10 @@ public static class Worker
 		});
 		P4K.OrderBy(x => x.Name);
 
-		var outputDrive = DriveInfo.GetDrives().First(x => Os.IsWindows ? x.Name == Globals.OutDirectory?.FullName[..3] : new DirectoryInfo(x.Name).Exists);
-		string summary =
+		var outputDrive = DriveInfo.GetDrives().First(x => RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 
+			x.Name == Globals.OutDirectory?.FullName[..3] : 
+				new DirectoryInfo(x.Name).Exists);
+		var summary =
 				@"\" + '\n' +
 				$" |                      Output Path | {Globals.OutDirectory?.FullName}" + '\n' +
 				$" |                        Partition | {outputDrive.Name}" + '\n' +
