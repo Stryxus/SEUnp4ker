@@ -5,7 +5,8 @@ namespace unp4ker;
 
 public class P4KFile : IDisposable
 {
-    public ZipFile Archive { get; private set; }
+    public ZipFile Archive { get; }
+    public List<string> FilteredOrderedEntries = [];
     
     public P4KFile(FileInfo? p4KFile)
     {
@@ -19,7 +20,7 @@ public class P4KFile : IDisposable
     public List<string> FilterEntries(Func<ZipEntry, bool> where) => Archive.Where(where).Select(entry => entry.Name).ToList();
 
     public ParallelQuery<ZipEntry> GetParallelEnumerator(int threads, ParallelMergeOptions merge, Func<ZipEntry, int, ZipEntry> func) => 
-        Archive.AsParallel().AsOrdered().WithDegreeOfParallelism(threads).WithMergeOptions(merge).Select(func);
+        Archive.Where(entry => FilteredOrderedEntries.Contains(entry.Name)).AsParallel().AsOrdered().WithDegreeOfParallelism(threads).WithMergeOptions(merge).Select(func);
     
     public void Extract(ZipEntry entry, FileInfo extractionFile)
     {

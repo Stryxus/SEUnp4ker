@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using ICSharpCode.SharpZipLib.Zip;
 using unlib;
@@ -10,8 +11,6 @@ namespace unp4k;
 public static class Worker
 {
 	private static P4KFile? P4K { set; get; }
-
-	private static List<string> FilteredOrderedEntries = [];
 
 	internal static bool Process_P4K()
     {
@@ -24,7 +23,7 @@ public static class Worker
 		// Set up the stream from the Data.p4k and contain it as an ICSC ZipFile with the appropriate keys then enqueue all zip entries.
 		// Filter out zip entries which cannot be decompressed and/or are locked behind a cipher.
 		// Speed up the extraction by a large amount by filtering out the files which already exist and don't need updating.
-		FilteredOrderedEntries = P4K.FilterEntries(entry =>
+		P4K.FilteredOrderedEntries = P4K.FilterEntries(entry =>
 		{
 			if (Globals.Filters.Count == 0 || Globals.Filters.Any(o => entry.Name.Contains(o)))
 			{
