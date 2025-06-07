@@ -1,6 +1,3 @@
-[submodule "SEUnp4ker/Modules/SharpZipLib"]
-	path = SEUnp4ker/Modules/SharpZipLib
-	url = https://github.com/Stryxus/SharpZipLib
 [submodule "Modules/SharpZipLib"]
 	path = Modules/SharpZipLib
 	url = https://github.com/Stryxus/SharpZipLib
