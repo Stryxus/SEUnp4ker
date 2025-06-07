@@ -22,4 +22,26 @@
       <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.5" />
     </ItemGroup>
 
+    <ItemGroup>
+        <!-- Example for Windows DLL -->
+        <!--
+        <None Include="..\zstd\out\win-x64\zstd.dll">
+            <Link>zstd.dll</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        -->
+        <!-- Example for Linux SO -->
+        <None Include="..\zstd\out\linux-x64\libzstd.so">
+            <Link>libzstd.so</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Visible>false</Visible>
+        </None>
+        <!-- Example for macOS DYLIB -->
+        <None Include="..\zstd\out\macos-arm64\libzstd.dylib">
+            <Link>libzstd.dylib</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Visible>false</Visible>
+        </None>
+    </ItemGroup>
+
 </Project>
