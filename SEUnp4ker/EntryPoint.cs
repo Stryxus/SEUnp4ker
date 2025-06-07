@@ -31,6 +31,7 @@ public static class EntryPoint
     internal static void Init(List<string>? args = null)
     {
         Logger.ClearBuffer();
+        Logger.LogInfo("Processing... Please wait...");
         // Parse arguments
         for (var i = 0; i < args?.Count; i++)
         {
