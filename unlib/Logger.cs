@@ -1,7 +1,7 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace unlib;
-
+[SuppressMessage("Design", "CA1050:Declare types in namespaces")]
 public static class Logger
 {
     public static event Action<int, int, string?>? OnLog;
