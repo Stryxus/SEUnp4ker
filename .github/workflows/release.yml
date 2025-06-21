@@ -44,10 +44,13 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
-      - name: Set version variable
-        id: version
+      - name: Set version variables
+        id: set_version
         run: |
-          echo "VERSION=$(date -u +'%Y.%m.%d.%H%M%S')" >> $GITHUB_ENV
+          VERSION=$(date -u +'%Y.%m.%d.%H%M')
+          INFO_VERSION=$(date -u +'%Y.%m.%d.%H%M%S')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "INFO_VERSION=$INFO_VERSION" >> $GITHUB_ENV
 
       - name: Build Framework-Dependent
         run: |
@@ -56,7 +59,10 @@ jobs:
             -o out/fdd-${{ matrix.rid }} \
             -r ${{ matrix.rid }} \
             --no-self-contained \
-            /p:Version=${{ env.VERSION }}
+            /p:Version=${{ env.VERSION }} \
+            /p:AssemblyVersion=${{ env.VERSION }} \
+            /p:FileVersion=${{ env.VERSION }} \
+            /p:InformationalVersion=${{ env.INFO_VERSION }}
 
       - name: Build Self-Contained
         run: |
@@ -65,7 +71,10 @@ jobs:
             -o out/scd-${{ matrix.rid }} \
             -r ${{ matrix.rid }} \
             --self-contained true \
-            /p:Version=${{ env.VERSION }}
+            /p:Version=${{ env.VERSION }} \
+            /p:AssemblyVersion=${{ env.VERSION }} \
+            /p:FileVersion=${{ env.VERSION }} \
+            /p:InformationalVersion=${{ env.INFO_VERSION }}
 
       - name: Archive FDD
         uses: actions/upload-artifact@v4
