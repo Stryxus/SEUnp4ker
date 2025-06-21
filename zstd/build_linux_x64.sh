@@ -11,8 +11,6 @@ mkdir -p "$BUILD_DIR" "$OUT_DIR"
 cmake -S "$SRC_DIR" -B "$BUILD_DIR" -G Ninja \
   -DCMAKE_SYSTEM_NAME=Linux \
   -DCMAKE_SYSTEM_PROCESSOR=x86_64 \
-  -DCMAKE_C_COMPILER=x86_64-unknown-linux-gnu-gcc \
-  -DCMAKE_CXX_COMPILER=x86_64-unknown-linux-gnu-g++ \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_LIBRARY_OUTPUT_DIRECTORY="$PWD/$OUT_DIR" \
