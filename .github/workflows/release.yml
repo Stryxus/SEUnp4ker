@@ -1,0 +1,94 @@
+name: Release SEUnp4ker
+
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          # Windows
+          - os: windows-latest
+            rid: win-x64
+            arch: x64
+          - os: windows-latest
+            rid: win-arm64
+            arch: arm64
+          # Linux
+          - os: ubuntu-latest
+            rid: linux-x64
+            arch: x64
+          - os: ubuntu-latest
+            rid: linux-arm64
+            arch: arm64
+          # macOS
+          - os: macos-latest
+            rid: osx-arm64
+            arch: arm64
+
+    env:
+      PROJECT_PATH: SEUnp4ker/SEUnp4ker.csproj
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: Set version variable
+        id: version
+        run: |
+          echo "VERSION=$(date -u +'%Y.%m.%d.%H%M%S')" >> $GITHUB_ENV
+
+      - name: Build Framework-Dependent
+        run: |
+          dotnet publish ${{ env.PROJECT_PATH }} \
+            -c Release \
+            -o out/fdd-${{ matrix.rid }} \
+            -r ${{ matrix.rid }} \
+            --no-self-contained \
+            /p:Version=${{ env.VERSION }}
+
+      - name: Build Self-Contained
+        run: |
+          dotnet publish ${{ env.PROJECT_PATH }} \
+            -c Release \
+            -o out/scd-${{ matrix.rid }} \
+            -r ${{ matrix.rid }} \
+            --self-contained true \
+            /p:Version=${{ env.VERSION }}
+
+      - name: Archive FDD
+        uses: actions/upload-artifact@v4
+        with:
+          name: fdd-${{ matrix.rid }}
+          path: out/fdd-${{ matrix.rid }}
+
+      - name: Archive SCD
+        uses: actions/upload-artifact@v4
+        with:
+          name: scd-${{ matrix.rid }}
+          path: out/scd-${{ matrix.rid }}
+
+  upload-release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Upload assets to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
