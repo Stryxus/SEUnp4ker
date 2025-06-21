@@ -22,11 +22,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICSharpCode.SharpZipLib", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zstd", "zstd", "{7AC47B42-6FCD-4228-8BA3-EEED54EAA181}"
 	ProjectSection(SolutionItems) = preProject
-		zstd\build_all.sh = zstd\build_all.sh
 		zstd\build_linux_x64.sh = zstd\build_linux_x64.sh
 		zstd\build_macos_arm64.sh = zstd\build_macos_arm64.sh
 		zstd\setup_deps.sh = zstd\setup_deps.sh
 		zstd\build_linux_arm64.sh = zstd\build_linux_arm64.sh
+		zstd\build_windows_x64.cmd = zstd\build_windows_x64.cmd
+		zstd\build_windows_arm64.cmd = zstd\build_windows_arm64.cmd
+		zstd\setup_deps.cmd = zstd\setup_deps.cmd
 	EndProjectSection
 EndProject
 Global
