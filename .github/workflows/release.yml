@@ -18,27 +18,30 @@ jobs:
           - os: windows-latest
             rid: win-x64
             arch: x64
+            script: build_windows_x64.cmd
           - os: windows-latest
             rid: win-arm64
             arch: arm64
+            script: build_windows_arm64.cmd
           # Linux
           - os: ubuntu-latest
             rid: linux-x64
             arch: x64
+            script: build_linux_x64.sh
           - os: ubuntu-latest
             rid: linux-arm64
             arch: arm64
+            script: build_linux_arm64.sh
           # macOS
           - os: macos-latest
             rid: osx-arm64
             arch: arm64
+            script: build_macos_arm64.sh
 
     env:
       PROJECT_PATH: SEUnp4ker/SEUnp4ker.csproj
 
     steps:
-      - uses: actions/checkout@v4
-
       - name: Checkout repository and submodules
         uses: actions/checkout@v4
         with:
@@ -52,6 +55,30 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
+      - name: Ensure Homebrew is installed (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          if ! command -v brew &>/dev/null; then
+            echo "Homebrew not found. Installing Homebrew..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          else
+            echo "Homebrew already installed."
+          fi
+        shell: bash
+
+      - name: Ensure Chocolatey is installed (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+            Write-Host "Chocolatey not found. Installing Chocolatey..."
+            Set-ExecutionPolicy Bypass -Scope Process -Force
+            [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+            iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          } else {
+            Write-Host "Chocolatey already installed."
+          }
+        shell: pwsh
+
       - name: Set version variables
         id: set_version
         run: |
@@ -59,6 +86,14 @@ jobs:
           INFO_VERSION=$(date -u +'%Y.%m.%d.%H%M%S')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "INFO_VERSION=$INFO_VERSION" >> $GITHUB_ENV
+
+      - name: Setup native dependencies
+        run: ./setup_deps.sh
+        shell: bash
+
+      - name: Build zstd for ${{ matrix.os }} ${{ matrix.arch }}
+        run: ./${{ matrix.script }}
+        shell: bash
 
       - name: Build Framework-Dependent
         run: |
