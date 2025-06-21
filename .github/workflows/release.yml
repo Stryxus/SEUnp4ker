@@ -87,10 +87,18 @@ jobs:
       - name: Set version variables
         id: set_version
         run: |
-          VERSION=$(date -u +'%Y.%m.%d.%H%M')
-          INFO_VERSION=$(date -u +'%Y.%m.%d.%H%M%S')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "INFO_VERSION=$INFO_VERSION" >> $GITHUB_ENV
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            $version = Get-Date -Format "yyyy.MM.dd.HHmm"
+            $info_version = Get-Date -Format "yyyy.MM.dd.HHmmss"
+            echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+            echo "INFO_VERSION=$info_version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          else
+            VERSION=$(date -u +'%Y.%m.%d.%H%M')
+            INFO_VERSION=$(date -u +'%Y.%m.%d.%H%M%S')
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+            echo "INFO_VERSION=$INFO_VERSION" >> $GITHUB_ENV
+          fi
+        shell: bash
 
       - name: Setup native dependencies
         run: |
