@@ -145,10 +145,9 @@ public class Worker : IDisposable
             "Extraction Complete" + '\n' +
             @"\" + '\n' +
             $" | File Errors: {Globals.FileErrors:#,##0}" + '\n' +
-            $" | Time Taken: {(float)overallTime.ElapsedMilliseconds / 60000:#,##0.000} minutes" + '\n' +
-             " | DO NOT OUTPUT to any form of SSD/NVMe too many times or else you risk degrading it if the output was large.");
+            $" | Time Taken: {(float)overallTime.ElapsedMilliseconds / 60000:#,##0.000} minutes");
         
-        if (Globals.OutDirectory is not null && Logger.AskUserInput("Would you like to open the output directory? (Application will close on input)")) Platform.OpenFileManager(Globals.OutDirectory.FullName);
+        if (Globals.OutDirectory is not null && Logger.AskUserInput("Would you like to open the output directory before exiting?")) Platform.OpenFileManager(Globals.OutDirectory.FullName);
     }
 
 	public void Dispose()
