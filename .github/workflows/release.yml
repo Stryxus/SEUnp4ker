@@ -19,24 +19,29 @@ jobs:
             rid: win-x64
             arch: x64
             script: build_windows_x64.cmd
+            shell: cmd
           - os: windows-latest
             rid: win-arm64
             arch: arm64
             script: build_windows_arm64.cmd
+            shell: cmd
           # Linux
           - os: ubuntu-latest
             rid: linux-x64
             arch: x64
             script: build_linux_x64.sh
+            shell: bash
           - os: ubuntu-latest
             rid: linux-arm64
             arch: arm64
             script: build_linux_arm64.sh
+            shell: bash
           # macOS
           - os: macos-latest
             rid: osx-arm64
             arch: arm64
             script: build_macos_arm64.sh
+            shell: bash
 
     env:
       PROJECT_PATH: SEUnp4ker/SEUnp4ker.csproj
@@ -88,11 +93,21 @@ jobs:
           echo "INFO_VERSION=$INFO_VERSION" >> $GITHUB_ENV
 
       - name: Setup native dependencies
-        run: ./setup_deps.sh
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            call zstd\setup_deps.cmd
+          else
+            bash zstd/setup_deps.sh
+          fi
         shell: bash
 
       - name: Build zstd for ${{ matrix.os }} ${{ matrix.arch }}
-        run: ./${{ matrix.script }}
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            call zstd\${{ matrix.script }}
+          else
+            bash zstd/${{ matrix.script }}
+          fi
         shell: bash
 
       - name: Build Framework-Dependent
