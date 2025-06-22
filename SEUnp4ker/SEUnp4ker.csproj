@@ -12,6 +12,10 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(SelfContained)' == 'true'">
+        <PublishTrimmed>true</PublishTrimmed>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\unlib\unlib.csproj" />
       <ProjectReference Include="..\unp4ker\unp4ker.csproj" />
