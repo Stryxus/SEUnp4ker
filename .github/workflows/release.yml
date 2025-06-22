@@ -102,23 +102,29 @@ jobs:
           Add-Content -Path $env:GITHUB_ENV -Value "INFO_VERSION=$info_version"
         shell: pwsh
 
-      - name: Setup native dependencies
-        run: |
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            call zstd\setup_deps.cmd
-          else
-            bash zstd/setup_deps.sh
-          fi
+      # Setup native dependencies - Linux/macOS
+      - name: Setup native dependencies (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: bash zstd/setup_deps.sh
         shell: bash
 
-      - name: Build zstd for ${{ matrix.os }} ${{ matrix.arch }}
-        run: |
-          if [ "$RUNNER_OS" = "Windows" ]; then
-            call zstd\${{ matrix.script }}
-          else
-            bash zstd/${{ matrix.script }}
-          fi
+      # Setup native dependencies - Windows
+      - name: Setup native dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: zstd\setup_deps.cmd
+        shell: cmd
+
+      # Build zstd - Linux/macOS
+      - name: Build zstd for ${{ matrix.os }} ${{ matrix.arch }} (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: bash zstd/${{ matrix.script }}
         shell: bash
+
+      # Build zstd - Windows
+      - name: Build zstd for ${{ matrix.os }} ${{ matrix.arch }} (Windows)
+        if: runner.os == 'Windows'
+        run: zstd\${{ matrix.script }}
+        shell: cmd
 
       - name: Build Framework-Dependent
         run: |
