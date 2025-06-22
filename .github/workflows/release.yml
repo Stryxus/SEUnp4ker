@@ -39,7 +39,7 @@ jobs:
             shell: bash
           # macOS
           - os: macos-latest
-            rid: osx-arm64
+            rid: macos-arm64
             arch: arm64
             script: build_macos_arm64.sh
             shell: bash
@@ -172,12 +172,12 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd out
-          zip -r ../fdd-${{ matrix.rid }}.zip fdd-${{ matrix.rid }}
+          zip -r ../seunp4ker-${{ matrix.rid }}.zip fdd-${{ matrix.rid }}
         shell: bash
 
       - name: Zip Framework-Dependent (Windows)
         if: runner.os == 'Windows'
-        run: Compress-Archive -Path out/fdd-${{ matrix.rid }}\* -DestinationPath fdd-${{ matrix.rid }}.zip
+        run: Compress-Archive -Path out/fdd-${{ matrix.rid }}\* -DestinationPath seunp4ker-${{ matrix.rid }}.zip
         shell: pwsh
 
       # Zip Self-Contained build output
@@ -185,26 +185,26 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd out
-          zip -r ../scd-${{ matrix.rid }}.zip scd-${{ matrix.rid }}
+          zip -r ../seunp4ker-self-contained-${{ matrix.rid }}.zip scd-${{ matrix.rid }}
         shell: bash
 
       - name: Zip Self-Contained (Windows)
         if: runner.os == 'Windows'
-        run: Compress-Archive -Path out/scd-${{ matrix.rid }}\* -DestinationPath scd-${{ matrix.rid }}.zip
+        run: Compress-Archive -Path out/scd-${{ matrix.rid }}\* -DestinationPath seunp4ker-self-contained-${{ matrix.rid }}.zip
         shell: pwsh
 
       # Upload zipped artifacts
       - name: Archive FDD ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: fdd-${{ matrix.rid }}-zip
-          path: fdd-${{ matrix.rid }}.zip
+          name: seunp4ker-${{ matrix.rid }}-zip
+          path: seunp4ker-${{ matrix.rid }}.zip
 
       - name: Archive SCD ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: scd-${{ matrix.rid }}-zip
-          path: scd-${{ matrix.rid }}.zip
+          name: seunp4ker-self-contained-${{ matrix.rid }}-zip
+          path: seunp4ker-self-contained-${{ matrix.rid }}.zip
 
   upload-release:
     needs: build
@@ -219,3 +219,16 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/**/*.zip
+
+      - name: Update Release Title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = process.env.VERSION || (new Date()).toISOString();
+            const releaseId = context.payload.release.id;
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: releaseId,
+              name: version
+            });
