@@ -12,7 +12,6 @@ if not exist "%OUT_DIR%" mkdir "%OUT_DIR%"
 echo Configuring CMake for Windows ARM64...
 cmake -S "%SRC_DIR%" -B "%BUILD_DIR%" -G Ninja ^
   -DCMAKE_SYSTEM_NAME=Windows ^
-  -A ARM64 ^
   -DBUILD_SHARED_LIBS=ON ^
   -DCMAKE_BUILD_TYPE=Release ^
   -DCMAKE_LIBRARY_OUTPUT_DIRECTORY="%CD%\%OUT_DIR%" ^
