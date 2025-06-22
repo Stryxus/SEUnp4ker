@@ -9,11 +9,11 @@
         <InvariantGlobalization>true</InvariantGlobalization>
         <RootNamespace>unp4k</RootNamespace>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <PublishAOT>false</PublishAOT>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(SelfContained)' == 'true'">
         <PublishTrimmed>true</PublishTrimmed>
-        <PublishAOT>true</PublishAOT>
     </PropertyGroup>
 
     <ItemGroup>
