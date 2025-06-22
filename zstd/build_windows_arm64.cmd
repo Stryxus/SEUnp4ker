@@ -2,8 +2,8 @@
 cd /d %~dp0
 setlocal enabledelayedexpansion
 set SRC_DIR=..\Modules\zstd\build\cmake
-set BUILD_DIR=out\windows-arm64\build
-set OUT_DIR=out\windows-arm64
+set BUILD_DIR=out\win-arm64\build
+set OUT_DIR=out\win-arm64
 
 echo Creating build directories...
 if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
