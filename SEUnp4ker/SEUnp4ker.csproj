@@ -23,21 +23,40 @@
     </ItemGroup>
 
     <ItemGroup>
-        <!-- Example for Windows DLL -->
-        <!--
-        <None Include="..\zstd\out\win-x64\zstd.dll">
+        
+        <!-- Windows x64 -->
+        <None Include="..\zstd\out\win-x64\zstd.dll"
+              Condition="'$(RuntimeIdentifier)' == 'win-x64'">
             <Link>zstd.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        -->
-        <!-- Example for Linux SO -->
-        <None Include="..\zstd\out\linux-x64\libzstd.so">
+
+        <!-- Windows arm64 -->
+        <None Include="..\zstd\out\win-arm64\zstd.dll"
+              Condition="'$(RuntimeIdentifier)' == 'win-arm64'">
+            <Link>zstd.dll</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+
+        <!-- Linux x64 -->
+        <None Include="..\zstd\out\linux-x64\libzstd.so"
+              Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
             <Link>libzstd.so</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Visible>false</Visible>
         </None>
-        <!-- Example for macOS DYLIB -->
-        <None Include="..\zstd\out\macos-arm64\libzstd.dylib">
+
+        <!-- Linux arm64 -->
+        <None Include="..\zstd\out\linux-arm64\libzstd.so"
+              Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
+            <Link>libzstd.so</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Visible>false</Visible>
+        </None>
+
+        <!-- macOS arm64 -->
+        <None Include="..\zstd\out\macos-arm64\libzstd.dylib"
+              Condition="'$(RuntimeIdentifier)' == 'osx-arm64'">
             <Link>libzstd.dylib</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Visible>false</Visible>
