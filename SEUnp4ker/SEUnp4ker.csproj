@@ -18,8 +18,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="9.0.5" />
       <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="9.0.5" />
+      <PackageReference Include="runtime.linux-arm64.Microsoft.DotNet.ILCompiler" Version="9.0.6" />
+      <PackageReference Include="runtime.linux-x64.Microsoft.DotNet.ILCompiler" Version="9.0.6" />
+      <PackageReference Include="runtime.osx-arm64.Microsoft.DotNet.ILCompiler" Version="9.0.6" />
+      <PackageReference Include="runtime.win-arm64.Microsoft.DotNet.ILCompiler" Version="9.0.6" />
+      <PackageReference Include="runtime.win-x64.Microsoft.DotNet.ILCompiler" Version="9.0.6" />
     </ItemGroup>
 
     <ItemGroup>
