@@ -147,7 +147,8 @@ jobs:
           dotnet publish $env:PROJECT_PATH -c Release -o out/fdd-${{ matrix.rid }} -r ${{ matrix.rid }} --no-self-contained /p:Version=$env:VERSION /p:AssemblyVersion=$env:VERSION /p:FileVersion=$env:VERSION /p:InformationalVersion=$env:INFO_VERSION
         shell: pwsh
 
-      - name: Build Self-Contained
+      - name: Build Self-Contained (Linux/macOS)
+        if: runner.os != 'Windows'
         run: |
           dotnet publish ${{ env.PROJECT_PATH }} \
             -c Release \
@@ -158,6 +159,13 @@ jobs:
             /p:AssemblyVersion=${{ env.VERSION }} \
             /p:FileVersion=${{ env.VERSION }} \
             /p:InformationalVersion=${{ env.INFO_VERSION }}
+        shell: bash
+      
+      - name: Build Self-Contained (Windows)
+        if: runner.os == 'Windows'
+        run: >
+          dotnet publish $env:PROJECT_PATH -c Release -o out/scd-${{ matrix.rid }} -r ${{ matrix.rid }} --self-contained true /p:Version=$env:VERSION /p:AssemblyVersion=$env:VERSION /p:FileVersion=$env:VERSION /p:InformationalVersion=$env:INFO_VERSION
+        shell: pwsh
 
       - name: Archive FDD
         uses: actions/upload-artifact@v4
