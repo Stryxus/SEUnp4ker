@@ -2,6 +2,8 @@
 Giving the ability to tear apart Star Engine games!
 
 People seemingly love to pick Star Engine games, like Star Citizen, apart! To find all the little details and changes and possibly more. So... Why not make this easy for the masses?
+
+![Screenshot of an exmaple of SEUnp4ker](https://github.com/Stryxus/SEUnp4ker/blob/c620935afb56b266378c6f31fa29cb69ea961eed/.github/readme_example.png)
 ## Usage
 ### Command-Line Arguments
 ```
