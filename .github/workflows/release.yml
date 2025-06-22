@@ -39,7 +39,7 @@ jobs:
             shell: bash
           # macOS
           - os: macos-latest
-            rid: osx-arm64
+            rid: macos-arm64
             arch: arm64
             script: build_macos_arm64.sh
             shell: bash
