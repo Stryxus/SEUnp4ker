@@ -15,14 +15,11 @@ public static class EntryPoint
                 " | Repository: https://github.com/Stryxus/SEUnp4ker" + '\n' +
                @" |\" + '\n' +
                 " | | -h or --help: Print out the manual." + '\n' +
-                " | - Required Arguments:" + '\n' +
                 " | | -i or -input: The input file path." + '\n' +
                 " | | -o or -output: The output directory path." + '\n' +
                 " | |" + '\n' +
-                " | - Optional Arguments:" + '\n' +
                 " | | -f   or --filter:    Allows you to filter in the files you want." + '\n' +
                 " | | -d   or --details:   Enabled detailed logging including errors." + '\n' +
-                " | | -j   or --json:      Converts all CryXML to JSON." + '\n' +
                 " | | -ow  or --overwrite: Overwrites files that already exist." + '\n' +
                 " | | -y   or --yes:       Don't ask for input, just continue. Recommended for automation." + '\n' +
                 " |/" + '\n' +
@@ -64,10 +61,6 @@ public static class EntryPoint
                 case "-d":
                 case "--details":
                     Globals.ShouldPrintDetailedLogs = true;
-                    break;
-                case "-j":
-                case "--json":
-                    Globals.ShouldConvertToJson = true;
                     break;
                 case "-ow":
                 case "--overwrite":

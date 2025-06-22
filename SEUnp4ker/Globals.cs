@@ -7,7 +7,6 @@ public static class Globals
     public static List<string> Filters { get; internal set; } = [];
 
     public static bool ShouldPrintDetailedLogs { get; internal set; }
-    public static bool ShouldConvertToJson { get; internal set; }
     public static bool ShouldOverwrite { get; internal set; }
     public static bool ShouldAcceptEverything { get; internal set; }
 
