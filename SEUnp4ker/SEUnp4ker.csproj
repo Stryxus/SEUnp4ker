@@ -33,14 +33,14 @@
     <ItemGroup>
         
         <!-- Windows x64 -->
-        <None Include="..\zstd\out\win-x64\zstd.dll"
+        <None Include="..\zstd\out\win-x64\libzstd.dll"
               Condition="'$(RuntimeIdentifier)' == 'win-x64'">
             <Link>libzstd.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
 
         <!-- Windows arm64 -->
-        <None Include="..\zstd\out\win-arm64\zstd.dll"
+        <None Include="..\zstd\out\win-arm64\libzstd.dll"
               Condition="'$(RuntimeIdentifier)' == 'win-arm64'">
             <Link>libzstd.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
