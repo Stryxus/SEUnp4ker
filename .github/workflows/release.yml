@@ -197,14 +197,14 @@ jobs:
       - name: Archive FDD ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: fdd-${{ matrix.rid }}-zip
-          path: fdd-${{ matrix.rid }}.zip
+          name: seunp4ker-${{ matrix.rid }}-zip
+          path: seunp4ker-${{ matrix.rid }}.zip
 
       - name: Archive SCD ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: scd-${{ matrix.rid }}-zip
-          path: scd-${{ matrix.rid }}.zip
+          name: seunp4ker-self-contained-${{ matrix.rid }}-zip
+          path: seunp4ker-self-contained-${{ matrix.rid }}.zip
 
   upload-release:
     needs: build
