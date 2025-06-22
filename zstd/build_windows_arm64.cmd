@@ -1,6 +1,7 @@
 @echo off
+cd /d %~dp0
 setlocal enabledelayedexpansion
-set SRC_DIR=%CD%\build\cmake
+set SRC_DIR=..\Modules\zstd\build\cmake
 set BUILD_DIR=out\windows-arm64\build
 set OUT_DIR=out\windows-arm64
 
