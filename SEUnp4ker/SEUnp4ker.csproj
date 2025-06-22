@@ -6,7 +6,6 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PublishAot>true</PublishAot>
         <InvariantGlobalization>true</InvariantGlobalization>
         <RootNamespace>unp4k</RootNamespace>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -14,6 +13,7 @@
 
     <PropertyGroup Condition="'$(SelfContained)' == 'true'">
         <PublishTrimmed>true</PublishTrimmed>
+        <PublishAOT>true</PublishAOT>
     </PropertyGroup>
 
     <ItemGroup>
