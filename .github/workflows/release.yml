@@ -53,6 +53,8 @@ jobs:
       PROJECT_PATH: SEUnp4ker/SEUnp4ker.csproj
 
     steps:
+      - uses: actions/checkout@v4
+
       - uses: ./.github/actions/setup-dotnet
         with:
           project-path: ${{ env.PROJECT_PATH }}
