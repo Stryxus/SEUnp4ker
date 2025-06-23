@@ -52,6 +52,9 @@ jobs:
     env:
       PROJECT_PATH: SEUnp4ker/SEUnp4ker.csproj
 
+    outputs:
+      version: ${{ steps.set_version_output.outputs.version }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -119,6 +122,11 @@ jobs:
         with:
           name: seunp4ker-self-contained-${{ matrix.rid }}-zip
           path: seunp4ker-self-contained-${{ matrix.rid }}.zip
+
+      - name: Set job output version
+        id: set_version_output
+        run: echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        shell: bash
 
   upload-release:
     needs: build
