@@ -19,33 +19,33 @@ jobs:
           - os: windows-latest
             rid: win-x64
             arch: x64
-            script: build_windows_x64.cmd
+            script: zstd\build_windows_x64.cmd
             shell: cmd
             zipshell: pwsh
           - os: windows-latest
             rid: win-arm64
             arch: arm64
-            script: build_windows_arm64.cmd
+            script: zstd\build_windows_arm64.cmd
             shell: cmd
             zipshell: pwsh
           # Linux
           - os: ubuntu-latest
             rid: linux-x64
             arch: x64
-            script: build_linux_x64.sh
+            script: zstd/build_linux_x64.sh
             shell: bash
             zipshell: bash
           - os: ubuntu-latest
             rid: linux-arm64
             arch: arm64
-            script: build_linux_arm64.sh
+            script: zstd/build_linux_arm64.sh
             shell: bash
             zipshell: bash
           # macOS
           - os: macos-latest
             rid: osx-arm64
             arch: arm64
-            script: build_macos_arm64.sh
+            script: zstd/build_macos_arm64.sh
             shell: bash
             zipshell: bash
 
@@ -55,15 +55,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/setup-dotnet
+      - name: Setup .NET
+        uses: ./.github/actions/setup-dotnet
         with:
           project-path: ${{ env.PROJECT_PATH }}
 
-      - uses: ./.github/actions/os-setup
+      - name: OS Package Manager Setup
+        uses: ./.github/actions/os-setup
 
-      - uses: ./.github/actions/set-version-vars
+      - name: Set Version Variables
+        uses: ./.github/actions/set-version-vars
 
-      - uses: ./.github/actions/native-deps
+      - name: Setup Native Dependencies
+        uses: ./.github/actions/native-deps
 
       # Build zstd
       - uses: ./.github/actions/build-zstd
