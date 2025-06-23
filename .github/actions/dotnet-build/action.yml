@@ -1,0 +1,37 @@
+name: Dotnet Build
+description: Build FDD and SCD
+inputs:
+  project-path:
+    required: true
+  rid:
+    required: true
+  shell:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Build FDD
+      run: |
+        dotnet publish ${{ inputs.project-path }} \
+          -c Release \
+          -o out/fdd-${{ inputs.rid }} \
+          -r ${{ inputs.rid }} \
+          --no-self-contained \
+          /p:Version=${{ env.VERSION }} \
+          /p:AssemblyVersion=${{ env.VERSION }} \
+          /p:FileVersion=${{ env.VERSION }} \
+          /p:InformationalVersion=${{ env.INFO_VERSION }}
+      shell: ${{ inputs.shell }}
+
+    - name: Build SCD
+      run: |
+        dotnet publish ${{ inputs.project-path }} \
+          -c Release \
+          -o out/scd-${{ inputs.rid }} \
+          -r ${{ inputs.rid }} \
+          --self-contained true \
+          /p:Version=${{ env.VERSION }} \
+          /p:AssemblyVersion=${{ env.VERSION }} \
+          /p:FileVersion=${{ env.VERSION }} \
+          /p:InformationalVersion=${{ env.INFO_VERSION }}
+      shell: ${{ inputs.shell }}

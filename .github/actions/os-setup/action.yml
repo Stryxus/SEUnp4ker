@@ -1,0 +1,22 @@
+name: OS Setup
+description: Ensure Homebrew/Chocolatey is installed
+runs:
+  using: composite
+  steps:
+    - name: Ensure Homebrew (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        if ! command -v brew &>/dev/null; then
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+      shell: bash
+
+    - name: Ensure Chocolatey (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+          Set-ExecutionPolicy Bypass -Scope Process -Force
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        }
+      shell: pwsh

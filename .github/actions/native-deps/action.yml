@@ -1,0 +1,14 @@
+name: Native Dependencies
+description: Setup native dependencies
+runs:
+  using: composite
+  steps:
+    - name: Setup native deps (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: bash zstd/setup_deps.sh
+      shell: bash
+
+    - name: Setup native deps (Windows)
+      if: runner.os == 'Windows'
+      run: zstd\setup_deps.cmd
+      shell: cmd

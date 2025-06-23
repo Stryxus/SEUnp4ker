@@ -21,153 +21,62 @@ jobs:
             arch: x64
             script: build_windows_x64.cmd
             shell: cmd
+            zipshell: pwsh
           - os: windows-latest
             rid: win-arm64
             arch: arm64
             script: build_windows_arm64.cmd
             shell: cmd
+            zipshell: pwsh
           # Linux
           - os: ubuntu-latest
             rid: linux-x64
             arch: x64
             script: build_linux_x64.sh
             shell: bash
+            zipshell: bash
           - os: ubuntu-latest
             rid: linux-arm64
             arch: arm64
             script: build_linux_arm64.sh
             shell: bash
+            zipshell: bash
           # macOS
           - os: macos-latest
             rid: osx-arm64
             arch: arm64
             script: build_macos_arm64.sh
             shell: bash
+            zipshell: bash
 
     env:
       PROJECT_PATH: SEUnp4ker/SEUnp4ker.csproj
 
     steps:
-      - name: Checkout repository and submodules
-        uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-dotnet
         with:
-          submodules: recursive
+          project-path: ${{ env.PROJECT_PATH }}
 
-      - name: Setup .NET 9 SDK
-        uses: actions/setup-dotnet@v4
+      - uses: ./.github/actions/os-setup
+
+      - uses: ./.github/actions/set-version-vars
+
+      - uses: ./.github/actions/native-deps
+
+      # Build zstd
+      - uses: ./.github/actions/build-zstd
         with:
-          dotnet-version: 9.0.x
+          script: ${{ matrix.script }}
+          shell: ${{ matrix.shell }}
 
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.PROJECT_PATH }}
+      # Build .NET (FDD and SCD)
+      - uses: ./.github/actions/dotnet-build
+        with:
+          project-path: ${{ env.PROJECT_PATH }}
+          rid: ${{ matrix.rid }}
+          shell: ${{ matrix.shell }}
 
-      - name: Ensure Homebrew is installed (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          if ! command -v brew &>/dev/null; then
-            echo "Homebrew not found. Installing Homebrew..."
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          else
-            echo "Homebrew already installed."
-          fi
-        shell: bash
-
-      - name: Ensure Chocolatey is installed (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-            Write-Host "Chocolatey not found. Installing Chocolatey..."
-            Set-ExecutionPolicy Bypass -Scope Process -Force
-            [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-            iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-          } else {
-            Write-Host "Chocolatey already installed."
-          }
-        shell: pwsh
-
-      - name: Set version variables (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: |
-          VERSION=$(date -u +'%Y.%m.%d.%H%M')
-          INFO_VERSION=$(date -u +'%Y.%m.%d.%H%M%S')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "INFO_VERSION=$INFO_VERSION" >> $GITHUB_ENV
-        shell: bash
-      
-      - name: Set version variables (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          $version = Get-Date -Format "yyyy.MM.dd.HHmm"
-          $info_version = Get-Date -Format "yyyy.MM.dd.HHmmss"
-          Add-Content -Path $env:GITHUB_ENV -Value "VERSION=$version"
-          Add-Content -Path $env:GITHUB_ENV -Value "INFO_VERSION=$info_version"
-        shell: pwsh
-
-      # Setup native dependencies - Linux/macOS
-      - name: Setup native dependencies (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: bash zstd/setup_deps.sh
-        shell: bash
-
-      # Setup native dependencies - Windows
-      - name: Setup native dependencies (Windows)
-        if: runner.os == 'Windows'
-        run: zstd\setup_deps.cmd
-        shell: cmd
-
-      # Build zstd - Linux/macOS
-      - name: Build zstd for ${{ matrix.os }} ${{ matrix.arch }} (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: bash zstd/${{ matrix.script }}
-        shell: bash
-
-      # Build zstd - Windows
-      - name: Build zstd for ${{ matrix.os }} ${{ matrix.arch }} (Windows)
-        if: runner.os == 'Windows'
-        run: zstd\${{ matrix.script }}
-        shell: cmd
-        
-      - name: Build Framework-Dependent (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: |
-          dotnet publish ${{ env.PROJECT_PATH }} \
-            -c Release \
-            -o out/fdd-${{ matrix.rid }} \
-            -r ${{ matrix.rid }} \
-            --no-self-contained \
-            /p:Version=${{ env.VERSION }} \
-            /p:AssemblyVersion=${{ env.VERSION }} \
-            /p:FileVersion=${{ env.VERSION }} \
-            /p:InformationalVersion=${{ env.INFO_VERSION }}
-        shell: bash
-      
-      - name: Build Framework-Dependent (Windows)
-        if: runner.os == 'Windows'
-        run: >
-          dotnet publish $env:PROJECT_PATH -c Release -o out/fdd-${{ matrix.rid }} -r ${{ matrix.rid }} --no-self-contained /p:Version=$env:VERSION /p:AssemblyVersion=$env:VERSION /p:FileVersion=$env:VERSION /p:InformationalVersion=$env:INFO_VERSION
-        shell: pwsh
-
-      - name: Build Self-Contained (Linux/macOS)
-        if: runner.os != 'Windows'
-        run: |
-          dotnet publish ${{ env.PROJECT_PATH }} \
-            -c Release \
-            -o out/scd-${{ matrix.rid }} \
-            -r ${{ matrix.rid }} \
-            --self-contained true \
-            /p:Version=${{ env.VERSION }} \
-            /p:AssemblyVersion=${{ env.VERSION }} \
-            /p:FileVersion=${{ env.VERSION }} \
-            /p:InformationalVersion=${{ env.INFO_VERSION }}
-        shell: bash
-      
-      - name: Build Self-Contained (Windows)
-        if: runner.os == 'Windows'
-        run: >
-          dotnet publish $env:PROJECT_PATH -c Release -o out/scd-${{ matrix.rid }} -r ${{ matrix.rid }} --self-contained true /p:Version=$env:VERSION /p:AssemblyVersion=$env:VERSION /p:FileVersion=$env:VERSION /p:InformationalVersion=$env:INFO_VERSION
-        shell: pwsh
-
-      # Zip Framework-Dependent build output
+      # Zip outputs (Bash or PowerShell depending on OS)
       - name: Zip Framework-Dependent (Linux/macOS)
         if: runner.os != 'Windows'
         run: |
@@ -175,18 +84,17 @@ jobs:
           zip -r ../seunp4ker-${{ matrix.rid }}.zip fdd-${{ matrix.rid }}
         shell: bash
 
-      - name: Zip Framework-Dependent (Windows)
-        if: runner.os == 'Windows'
-        run: Compress-Archive -Path out/fdd-${{ matrix.rid }}\* -DestinationPath seunp4ker-${{ matrix.rid }}.zip
-        shell: pwsh
-
-      # Zip Self-Contained build output
       - name: Zip Self-Contained (Linux/macOS)
         if: runner.os != 'Windows'
         run: |
           cd out
           zip -r ../seunp4ker-self-contained-${{ matrix.rid }}.zip scd-${{ matrix.rid }}
         shell: bash
+
+      - name: Zip Framework-Dependent (Windows)
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path out/fdd-${{ matrix.rid }}\* -DestinationPath seunp4ker-${{ matrix.rid }}.zip
+        shell: pwsh
 
       - name: Zip Self-Contained (Windows)
         if: runner.os == 'Windows'

@@ -1,0 +1,21 @@
+name: Zip Output
+description: Zip FDD and SCD outputs
+inputs:
+  rid:
+    required: true
+  shell:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Zip FDD
+      run: |
+        cd out
+        zip -r ../seunp4ker-${{ inputs.rid }}.zip fdd-${{ inputs.rid }}
+      shell: ${{ inputs.shell }}
+
+    - name: Zip SCD
+      run: |
+        cd out
+        zip -r ../seunp4ker-self-contained-${{ inputs.rid }}.zip scd-${{ inputs.rid }}
+      shell: ${{ inputs.shell }}

@@ -1,0 +1,23 @@
+name: Setup .NET
+description: Checkout, setup .NET, restore
+inputs:
+  project-path:
+    required: true
+    description: Path to .csproj
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: dotnet restore ${{ inputs.project-path }}
+      shell: bash
+    - name: Restore dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: dotnet restore ${{ inputs.project-path }}
+      shell: pwsh

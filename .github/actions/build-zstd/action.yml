@@ -1,0 +1,15 @@
+name: Build zstd
+description: Build zstd for current platform
+inputs:
+  script:
+    required: true
+    description: Script to run
+  shell:
+    required: true
+    description: Shell to use
+runs:
+  using: composite
+  steps:
+    - name: Build zstd
+      run: ${{ inputs.script }}
+      shell: ${{ inputs.shell }}

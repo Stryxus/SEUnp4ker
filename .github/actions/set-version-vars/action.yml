@@ -1,0 +1,22 @@
+name: Set Version Vars
+description: Set version variables
+runs:
+  using: composite
+  steps:
+    - name: Set version (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: |
+        VERSION=$(date -u +'%Y.%m.%d.%H%M')
+        INFO_VERSION=$(date -u +'%Y.%m.%d.%H%M')
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "INFO_VERSION=$INFO_VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set version (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        $version = Get-Date -Format "yyyy.MM.dd.HHmm"
+        $info_version = Get-Date -Format "yyyy.MM.dd.HHmm"
+        Add-Content -Path $env:GITHUB_ENV -Value "VERSION=$version"
+        Add-Content -Path $env:GITHUB_ENV -Value "INFO_VERSION=$info_version"
+      shell: pwsh
