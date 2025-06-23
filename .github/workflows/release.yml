@@ -69,14 +69,14 @@ jobs:
       - name: Setup Native Dependencies
         uses: ./.github/actions/native-deps
 
-      # Build zstd
-      - uses: ./.github/actions/build-zstd
+      - name: Build zstd
+        uses: ./.github/actions/build-zstd
         with:
           script: ${{ matrix.script }}
           shell: ${{ matrix.shell }}
 
-      # Build .NET (FDD and SCD)
-      - uses: ./.github/actions/dotnet-build
+      - name: Build .NET (FDD and SCD)
+        uses: ./.github/actions/dotnet-build
         with:
           project-path: ${{ env.PROJECT_PATH }}
           rid: ${{ matrix.rid }}

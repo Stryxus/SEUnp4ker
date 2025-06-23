@@ -5,12 +5,12 @@ inputs:
     required: true
   rid:
     required: true
-  shell:
-    required: true
 runs:
   using: composite
   steps:
-    - name: Build FDD
+    # Framework-Dependent Build (Linux/macOS)
+    - name: Build FDD (Linux/macOS)
+      if: runner.os != 'Windows'
       run: |
         dotnet publish ${{ inputs.project-path }} \
           -c Release \
@@ -21,9 +21,18 @@ runs:
           /p:AssemblyVersion=${{ env.VERSION }} \
           /p:FileVersion=${{ env.VERSION }} \
           /p:InformationalVersion=${{ env.INFO_VERSION }}
-      shell: ${{ inputs.shell }}
+      shell: bash
 
-    - name: Build SCD
+    # Framework-Dependent Build (Windows)
+    - name: Build FDD (Windows)
+      if: runner.os == 'Windows'
+      run: >
+        dotnet publish ${{ inputs.project-path }} -c Release -o out/fdd-${{ inputs.rid }} -r ${{ inputs.rid }} --no-self-contained /p:Version=${{ env.VERSION }} /p:AssemblyVersion=${{ env.VERSION }} /p:FileVersion=${{ env.VERSION }} /p:InformationalVersion=${{ env.INFO_VERSION }}
+      shell: pwsh
+
+    # Self-Contained Build (Linux/macOS)
+    - name: Build SCD (Linux/macOS)
+      if: runner.os != 'Windows'
       run: |
         dotnet publish ${{ inputs.project-path }} \
           -c Release \
@@ -34,4 +43,11 @@ runs:
           /p:AssemblyVersion=${{ env.VERSION }} \
           /p:FileVersion=${{ env.VERSION }} \
           /p:InformationalVersion=${{ env.INFO_VERSION }}
-      shell: ${{ inputs.shell }}
+      shell: bash
+
+    # Self-Contained Build (Windows)
+    - name: Build SCD (Windows)
+      if: runner.os == 'Windows'
+      run: >
+        dotnet publish ${{ inputs.project-path }} -c Release -o out/scd-${{ inputs.rid }} -r ${{ inputs.rid }} --self-contained true /p:Version=${{ env.VERSION }} /p:AssemblyVersion=${{ env.VERSION }} /p:FileVersion=${{ env.VERSION }} /p:InformationalVersion=${{ env.INFO_VERSION }}
+      shell: pwsh
