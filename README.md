@@ -30,7 +30,7 @@ You will require the latest version of the .NET 9 SDK for your platform.
 4. Build SEUnp4ker!
 #### Linux
 1. Install the dependencies by running [zstd/setup_deps.sh](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/setup_deps.sh).
-2. Run [zstd/build_linux_x64.sh](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_linux_x64.sh) or [zstd/build_linux_arm64.cshmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_linux_arm64.sh) to build the zstd library.
+2. Run [zstd/build_linux_x64.sh](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_linux_x64.sh) or [zstd/build_linux_arm64.sh](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_linux_arm64.sh) to build the zstd library.
 3. Build SEUnp4ker!
 #### macOS
 1. Install [Homebrew](https://brew.sh)
