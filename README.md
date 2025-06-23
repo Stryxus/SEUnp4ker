@@ -29,13 +29,13 @@ You will require the latest version of the .NET 9 SDK for your platform.
 3. Run [zstd/build_windows_x64.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_windows_x64.cmd) or [zstd/build_windows_arm64.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_windows_arm64.cmd) to build the zstd library.
 4. Build SEUnp4ker!
 #### Linux
-1. Install the dependencies by running [zstd/setup_deps.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/setup_deps.cmd).
-2. Run [zstd/build_linux_x64.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_linux_x64.cmd) or [zstd/build_linux_arm64.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_linux_arm64.cmd) to build the zstd library.
+1. Install the dependencies by running [zstd/setup_deps.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/setup_deps.sh).
+2. Run [zstd/build_linux_x64.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_linux_x64.sh) or [zstd/build_linux_arm64.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_linux_arm64.sh) to build the zstd library.
 3. Build SEUnp4ker!
 #### macOS
 1. Install [Homebrew](https://brew.sh)
-2. Install the dependencies through Homebrew by running [zstd/setup_deps.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/setup_deps.cmd).
-3. Run [zstd/build_macOS_arm64.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_macOS_arm64.cmd) to build the zstd library.
+2. Install the dependencies through Homebrew by running [zstd/setup_deps.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/setup_deps.sh).
+3. Run [zstd/build_macOS_arm64.cmd](https://github.com/Stryxus/SEUnp4ker/blob/main/zstd/build_macOS_arm64.sh) to build the zstd library.
 4. Build SEUnp4ker!
 ## Goals (Currently)
 - Add in a completely re-written [unforger](https://github.com/Stryxus/unp4k/tree/feature/rewrite/libs/unforge) system.
